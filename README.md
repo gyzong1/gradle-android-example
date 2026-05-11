@@ -15,3 +15,4 @@ gradlePluginPortal()
 sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
 yes | sdkmanager --licenses# gradle-android-example
+# gradle-android-example
