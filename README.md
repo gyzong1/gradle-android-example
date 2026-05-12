@@ -1,2 +1,1 @@
 # gradle-android-example
-test
