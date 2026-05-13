@@ -83,14 +83,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    // --- Intentionally vulnerable deps for scanner / SBOM testing only; do not ship to production ---
-    // commons-compress 1.18: CVE-2021-35515, CVE-2021-35516, CVE-2021-35517, CVE-2021-36088 (among others)
+    // CVE
     implementation 'org.apache.commons:commons-compress:1.18'
-    // commons-text 1.9: CVE-2022-42889 (Text4Shell)
     implementation 'org.apache.commons:commons-text:1.9'
-    // snakeyaml 1.26: CVE-2022-1471 (unsafe deserialization in Constructor)
     implementation 'org.yaml:snakeyaml:1.26'
-    // jackson-databind 2.9.8: multiple deserialization CVEs (e.g. CVE-2019-14379, CVE-2019-14540)
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 
     testImplementation 'junit:junit:4.13.2'
