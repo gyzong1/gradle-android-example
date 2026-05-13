@@ -3,8 +3,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     // 1. 添加 Maven publish 插件
     id 'maven-publish'
-    // 添加 artifactory 插件
-    id 'com.jfrog.artifactory' version '5.2.5'
 }
 
 android {
