@@ -36,6 +36,8 @@ jobs:
         run: |
           # Ping the server
           jf rt ping  
+          # Set up Gradle configuration
+          jf gradle-config --server-id-resolve=setup-jfrog-cli-server --repo-resolve=guoyz-maven-virtual --server-id-deploy=setup-jfrog-cli-server --repo-deploy=guoyz-maven-dev-local
           # Gradle(Android) Build
           jf gradle clean assembleRelease artifactoryPublish
           # Collect environment variables for the build
