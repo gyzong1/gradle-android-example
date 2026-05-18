@@ -33,19 +33,19 @@ jobs:
         with:
           validate-wrappers: false
 
-      - name: Publish to Artifactory with Gradle
-        env:
-          JFROG_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
-          ARTIFACTORY_USER: guoyunzong
-        run: |
-          gradle clean build 
+      # - name: Publish to Artifactory with Gradle
+      #   env:
+      #     JFROG_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+      #     ARTIFACTORY_USER: guoyunzong
+      #   run: |
+      #     gradle clean build 
 
       - name: Run JFrog CLI
         run: |
           # # Ping the server
           jf rt ping
           # # Build
-          # jf gradle clean assembleRelease artifactoryPublish
+          jf gradle clean assembleRelease artifactoryPublish
 
           # # Collect environment variables for the build
           # jf rt bce
