@@ -36,7 +36,7 @@ jobs:
           validate-wrappers: false
           gradle-version: '7.6.3'
 
-      # - name: Publish to Artifactory with Gradle
+      # - name: Publish to Artifactory with Gradle 
       #   env:
       #     JFROG_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
       #     ARTIFACTORY_USER: guoyunzong
