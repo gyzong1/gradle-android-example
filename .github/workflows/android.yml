@@ -1,4 +1,4 @@
-name: "Setup JFrog CLI Example"
+name: "android-build-scan"
 on: push
 
 jobs:
