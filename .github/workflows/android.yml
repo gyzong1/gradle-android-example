@@ -16,6 +16,8 @@ jobs:
 
           # JFrog Platform access token
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          # Need to add the users, or the publish will report 401
+          ARTIFACTORY_USER: guoyunzong
 
           # Basic authentication credentials
           ## JF_USER: ${{ secrets.JF_USER }}
