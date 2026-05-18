@@ -1,4 +1,4 @@
-name: "android-build-scan"
+name: "guoyz-android-build-scan"
 on: push
 
 jobs:
@@ -56,4 +56,4 @@ jobs:
           # Publish build info
           jf rt bp
           # Android build scan
-          jf bs android-build-scan ${{ name }} ${{ github.run_number }}
+          jf bs android-build-scan guoyz-android-build-scan ${{ github.run_number }}
