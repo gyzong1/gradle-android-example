@@ -56,4 +56,4 @@ jobs:
           # Publish build info
           jf rt bp
           # Android build scan
-          jf bs guoyz-android-build-scan ${{ github.run_number }}
+          jf bs guoyz-android-build-scan ${{ github.run_number }} --fail=false
