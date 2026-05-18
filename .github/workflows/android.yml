@@ -45,7 +45,8 @@ jobs:
           # # Ping the server
           jf rt ping
           # # Build
-          jf gradle clean assembleRelease artifactoryPublish --uses-wrapper=true
+          jf gradle-config --use-wrapper=true
+          jf gradle clean assembleRelease artifactoryPublish
 
           # # Collect environment variables for the build
           # jf rt bce
