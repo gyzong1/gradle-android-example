@@ -1,93 +1,56 @@
-plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    // 1. 添加 Maven publish 插件
-    id 'maven-publish'
-}
+name: "Setup JFrog CLI Example"
+on: push
 
-android {
-    namespace 'com.example.gradleandroid'
-    compileSdk 34
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    defaultConfig {
-        applicationId 'com.example.gradleandroid'
-        minSdk 24
-        targetSdk 34
-        versionCode 1
-        versionName '1.0'
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-    }
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          # JFrog platform url (for example: https://artifactory_url)
+          JF_URL: ${{ vars.JF_URL }}
 
-    // 2. Android 插件创建一个可发布的组件（此处以 release 为例）
-    publishing {
-        singleVariant("release") {
-            // 如果需要同时推送源码和文档，取消下面注释
-            // withSourcesJar()
-            // withJavadocJar()
-        }
-    }
+          # JFrog Platform access token
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
+          # Basic authentication credentials
+          ## JF_USER: ${{ secrets.JF_USER }}
+          ## JF_PASSWORD: ${{ secrets.JF_PASSWORD }}
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
+      - name: set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
 
-    kotlinOptions {
-        jvmTarget = '17'
-    }
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4 
+        with:
+          validate-wrappers: false
+          gradle-version: '7.6.3'
 
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
-}
+      # - name: Publish to Artifactory with Gradle
+      #   env:
+      #     JFROG_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+      #     ARTIFACTORY_USER: guoyunzong
+      #   run: |
+      #     gradle clean build 
 
-// 3. 配置具体的 Maven 产物
-// 使用 afterEvaluate 确保在 Android 插件配置完成后再读取组件
-afterEvaluate {
-    publishing {
-        publications {
-            // 创建一个名为 "mavenRelease" 的产出物
-            mavenRelease(MavenPublication) {
-                // 确保在组件创建后引用
-                from components.release
-                
-                // 定义在 Artifactory 中的 GAV 坐标
-                groupId = 'com.example.gradleandroid'
-                artifactId = 'gradle-android-app'
-                version = '1.0.0'
-            }
-        }
-    }
+      - name: Run JFrog CLI
+        run: |
+          # # Ping the server
+          jf rt ping
+          # # Build
+          # jf gradle clean assembleRelease artifactoryPublish
 
-    // 4. 将出版物关联到 Artifactory 任务
-    artifactoryPublish {
-        publications(publishing.publications.mavenRelease)
-    }
-}
-
-
-dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-
-    // CVE
-    implementation 'org.apache.commons:commons-compress:1.18'
-    implementation 'org.apache.commons:commons-text:1.9'
-    implementation 'org.yaml:snakeyaml:1.26'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
-
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-}
+          # # Collect environment variables for the build
+          # jf rt bce
+          # # Collect VCS details from git and add them to the build
+          # jf rt bag
+          # # Publish build info
+          # jf rt bp
