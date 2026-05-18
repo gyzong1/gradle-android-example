@@ -32,8 +32,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v4 
 
       - name: Publish to Artifactory with Gradle
-        # with:
-        #   validate-wrappers: false
+        with:
+          validate-wrappers: false
         env:
           JFROG_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
           ARTIFACTORY_USER: guoyunzong
