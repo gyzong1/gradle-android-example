@@ -1,0 +1,12 @@
+version: 1
+type: gradle
+resolver:
+    repo: guoyz-maven-virtual
+    serverId: setup-jfrog-cli-server
+deployer:
+    repo: guoyz-maven-dev-local
+    serverId: setup-jfrog-cli-server
+    deployMavenDescriptors: true
+    deployIvyDescriptors: true
+    ivyPattern: '[organization]/[module]/ivy-[revision].xml'
+    artifactPattern: '[organization]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
