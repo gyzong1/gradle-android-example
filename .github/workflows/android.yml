@@ -11,7 +11,7 @@ jobs:
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         env:
-          # JFrog platform url (for example: https://artifactory_url)
+          # JFrog platform URL (for example: https://artifactory_url)
           JF_URL: ${{ vars.JF_URL }}
 
           # JFrog Platform access token
@@ -45,14 +45,15 @@ jobs:
 
       - name: Run JFrog CLI
         run: |
-          # # Ping the server
-          jf rt ping
-          # # Build
+          # Ping the server
+          jf rt ping  
+          # Gradle(Android) Build
           jf gradle clean assembleRelease artifactoryPublish
-
-          # # Collect environment variables for the build
-          # jf rt bce
-          # # Collect VCS details from git and add them to the build
-          # jf rt bag
-          # # Publish build info
-          # jf rt bp
+          # Collect environment variables for the build
+          jf rt bce
+          # Collect VCS details from git and add them to the build
+          jf rt bag
+          # Publish build info
+          jf rt bp
+          # Android build scan
+          jf bs android-build-scan ${{ name }} ${{ github.run_number }}
