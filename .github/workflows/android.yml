@@ -10,7 +10,7 @@ jobs:
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         env:
-          # JFrog platform url (for example: https://demo.jfrogchina.com)
+          # JFrog platform url (for example: https://artifactory_url)
           JF_URL: ${{ vars.JF_URL }}
 
           # JFrog Platform access token
