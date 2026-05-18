@@ -32,21 +32,21 @@ jobs:
         uses: gradle/actions/setup-gradle@v4 
         with:
           validate-wrappers: false
+          gradle-version: '7.6.3'
 
-      # - name: Publish to Artifactory with Gradle
-      #   env:
-      #     JFROG_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
-      #     ARTIFACTORY_USER: guoyunzong
-      #   run: |
-      #     gradle clean build 
+      - name: Publish to Artifactory with Gradle
+        env:
+          JFROG_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          ARTIFACTORY_USER: guoyunzong
+        run: |
+          gradle clean build 
 
       - name: Run JFrog CLI
         run: |
           # # Ping the server
           jf rt ping
           # # Build
-          jf gradle-config --use-wrapper=true
-          jf gradle clean assembleRelease artifactoryPublish
+          # jf gradle clean assembleRelease artifactoryPublish
 
           # # Collect environment variables for the build
           # jf rt bce
