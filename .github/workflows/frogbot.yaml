@@ -48,7 +48,8 @@ jobs:
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
           JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JF_GIT_BASE_BRANCH: ${{ matrix.branch }}
-          JFROG_CLI_DEPENDENCIES_DIR: "" 
+          useWrapper: false
+          # JFROG_CLI_DEPENDENCIES_DIR: "" 
           # EXECUTABLE_PATH: "gradle"
-          JFROG_CLI_SUB_COMMAND_EXECUTABLE: "gradle"
-          JFROG_CLI_SUB_COMMAND_ARGS: "-PdisableArtifactoryPublish=true"
+          # JFROG_CLI_SUB_COMMAND_EXECUTABLE: "gradle"
+          # JFROG_CLI_SUB_COMMAND_ARGS: "-PdisableArtifactoryPublish=true"
