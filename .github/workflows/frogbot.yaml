@@ -47,3 +47,4 @@ jobs:
           JFROG_CLI_DEPENDENCIES_DIR: "" 
           # EXECUTABLE_PATH: "gradle"
           JFROG_CLI_SUB_COMMAND_EXECUTABLE: "gradle"
+          JFROG_CLI_SUB_COMMAND_ARGS: "-PdisableArtifactoryPublish=true"
