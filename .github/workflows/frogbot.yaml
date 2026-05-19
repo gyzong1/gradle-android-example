@@ -68,6 +68,7 @@ jobs:
           JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JF_GIT_BASE_BRANCH: ${{ matrix.branch }}
           useWrapper: false
+          JF_FIX_AND_PR: "false"
           # JFROG_CLI_DEPENDENCIES_DIR: "" 
           # EXECUTABLE_PATH: "gradle"
           # JFROG_CLI_SUB_COMMAND_EXECUTABLE: "gradle"
