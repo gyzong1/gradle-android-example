@@ -46,3 +46,4 @@ jobs:
           JF_GIT_BASE_BRANCH: ${{ matrix.branch }}
           JFROG_CLI_DEPENDENCIES_DIR: "" 
           # EXECUTABLE_PATH: "gradle"
+          JFROG_CLI_SUB_COMMAND_EXECUTABLE: "gradle"
