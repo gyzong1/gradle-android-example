@@ -36,6 +36,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '7.6.3'
+          validate-wrappers: false
 
       - uses: jfrog/frogbot@v2
         env:
