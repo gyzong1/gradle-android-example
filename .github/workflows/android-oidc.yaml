@@ -26,6 +26,7 @@ jobs:
         with:
           # Name of the OIDC provider as specified on the OIDC integration page in the JFrog Platform
           oidc-provider-name: guoyz-github
+          oidc-audience: guoyz-github
 
       - name: set up JDK 17
         uses: actions/setup-java@v4
