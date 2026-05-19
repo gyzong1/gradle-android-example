@@ -61,16 +61,17 @@ jobs:
           }
           EOF
 
-      - name: Create Frogbot Ignore File
+      - name: Dynamically Patch Descriptor Files
         run: |
-          cat << 'EOF' > .frogbotignore
-          ignore:
-            - id: "com.fasterxml.jackson.core:jackson-core"
-              reason: "Transitive dependency, handled by main release pipeline"
-            - id: "org.apache.commons:commons-lang3"
-              reason: "Transitive dependency, handled by main release pipeline"
+          cat << 'EOF' >> app/build.gradle
+
+          // Dynamically injected for Frogbot Fix engine compliance
+          dependencies {
+              implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+              implementation 'org.apache.commons:commons-lang3:3.12.0'
+          }
           EOF
-          cat .frogbotignore
+          tail -n 10 app/build.gradle
 
       - uses: jfrog/frogbot@v2
         env:
