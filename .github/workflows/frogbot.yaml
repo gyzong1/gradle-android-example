@@ -61,17 +61,22 @@ jobs:
           }
           EOF
 
-      - name: Dynamically Patch Descriptor Files
+      - name: Inject Global Dummy Artifactory Method
         run: |
-          cat << 'EOF' >> app/build.gradle
-
-          // Dynamically injected for Frogbot Fix engine compliance
-          dependencies {
-              implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
-              implementation 'org.apache.commons:commons-lang3:3.12.0'
+          mkdir -p ~/.gradle
+          cat << 'EOF' > ~/.gradle/init.gradle
+          class DummyExtension {
+              def methodMissing(String name, args) { return new DummyExtension() }
+              def propertyMissing(String name) { return new DummyExtension() }
+          }
+          allprojects {
+              initscript {
+                  try {
+                      extensions.add("artifactoryPublish", new DummyExtension())
+                  } catch (Exception e) {}
+              }
           }
           EOF
-          tail -n 10 app/build.gradle
 
       - uses: jfrog/frogbot@v2
         env:
