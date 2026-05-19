@@ -38,11 +38,21 @@ jobs:
           gradle-version: '7.6.3'
           validate-wrappers: false
 
-      - name: Disable ArtifactoryPublish for Frogbot Scan
+      - name: Inject Global Dummy Artifactory Method
         run: |
-          find . -name "*.gradle" -type f -exec sed -i 's/artifactoryPublish/task dummyArtifactoryPublish/g' {} +
-          echo "==== 检查替换是否成功 ===="
-          find . -name "*.gradle" -type f -exec grep -H "dummyArtifactoryPublish" {} \; || true
+          mkdir -p ~/.gradle
+          cat << 'EOF' > ~/.gradle/init.gradle
+          allprojects {
+              initscript {
+                  try {
+                      // 动态拦截，即使 build.gradle 没引入插件，调用这个方法也不会崩
+                      extensions.add("artifactoryPublish", { Closure c -> })
+                  } catch (Exception e) {
+                      // 忽略重复添加的错误
+                  }
+              }
+          }
+          EOF
 
       - uses: jfrog/frogbot@v2
         env:
