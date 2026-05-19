@@ -42,22 +42,20 @@ jobs:
         run: |
           mkdir -p ~/.gradle
           cat << 'EOF' > ~/.gradle/init.gradle
+          class DummyExtension {
+              def methodMissing(String name, args) { 
+                  return new DummyExtension() 
+              }
+              def propertyMissing(String name) { 
+                  return new DummyExtension()
+              }
+          }
+
           allprojects {
-              // 自动检测当前是不是 Frogbot 的生成依赖树任务
-              def isFrogbotScan = gradle.startParameter.taskNames.any { it.contains("generateDepTrees") || it.contains("dependencies") }
-              
-              if (isFrogbotScan) {
-                  // 1. 如果项目已经由于某种原因存在该扩展，直接移除它
-                  if (extensions.findByName("artifactoryPublish")) {
-                      extensions.remove("artifactoryPublish")
-                  }
-                  
-                  // 2. 注册一个“黑洞”方法，吞掉所有对 artifactoryPublish 的调用和它内部所有的子配置（如 publications）
-                  // methodMissing 是 Groovy 的元编程黑科技，能动态吃掉任何未定义的方法调用而不报错
-                  metaClass.artifactoryPublish = { Closure c -> 
-                      c.delegate = new Expando()
-                      c.resolveStrategy = Closure.DELEGATE_FIRST
-                      c()
+              initscript {
+                  try {
+                      extensions.add("artifactoryPublish", new DummyExtension())
+                  } catch (Exception e) {
                   }
               }
           }
