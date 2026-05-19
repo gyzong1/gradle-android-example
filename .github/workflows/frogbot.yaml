@@ -61,6 +61,17 @@ jobs:
           }
           EOF
 
+      - name: Create Frogbot Ignore File
+        run: |
+          cat << 'EOF' > .frogbotignore
+          ignore:
+            - id: "com.fasterxml.jackson.core:jackson-core"
+              reason: "Transitive dependency, handled by main release pipeline"
+            - id: "org.apache.commons:commons-lang3"
+              reason: "Transitive dependency, handled by main release pipeline"
+          EOF
+          cat .frogbotignore
+
       - uses: jfrog/frogbot@v2
         env:
           JF_URL: ${{ secrets.JF_URL }}
