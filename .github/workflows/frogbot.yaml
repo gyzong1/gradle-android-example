@@ -38,9 +38,9 @@ jobs:
           gradle-version: '7.6.3'
           validate-wrappers: false
 
-      - name: Disable ArtifactoryPublish for Frogbot Scan
-        run: |
-          sed -i 's/artifactoryPublish/task dummyArtifactoryPublish/g' app/build.gradle
+      # - name: Disable ArtifactoryPublish for Frogbot Scan
+      #   run: |
+      #     sed -i 's/artifactoryPublish/task dummyArtifactoryPublish/g' app/build.gradle
 
       - uses: jfrog/frogbot@v2
         env:
