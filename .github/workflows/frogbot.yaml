@@ -85,6 +85,7 @@ jobs:
           JFROG_CLI_SUB_COMMAND_EXECUTABLE: "gradle"
           useWrapper: false
           JF_FIX_AND_PR: "false"
+          JF_GIT_PROVIDER: "github"
 
       # - uses: jfrog/frogbot@v2
       #   env:
