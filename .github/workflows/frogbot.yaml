@@ -86,6 +86,8 @@ jobs:
           useWrapper: false
           JF_FIX_AND_PR: "false"
           JF_GIT_PROVIDER: "github"
+          JF_GIT_OWNER: ${{ github.repository_owner }}
+          JF_GIT_REPO: ${{ github.event.repository.name }}
 
       # - uses: jfrog/frogbot@v2
       #   env:
