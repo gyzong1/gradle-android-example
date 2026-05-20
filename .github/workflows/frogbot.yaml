@@ -63,7 +63,13 @@ jobs:
 
       - name: Download Frogbot CLI
         run: |
-          curl -fL "https://releases.jfrog.io/artifactory/frogbot/v2/2.32.3/frogbot-linux-amd64" -o frogbot
+          curl -fL "https://releases.jfrog.io/artifactory/frogbot/v2/2.32.3/frogbot-linux-amd64/frogbot" -o frogbot
+          
+          if head -n 1 frogbot | grep -q "DOCTYPE"; then
+              cat frogbot
+              exit 1
+          fi
+          
           chmod +x frogbot
           sudo mv frogbot /usr/local/bin/
 
