@@ -1,6 +1,6 @@
 pluginManagement {
     repositories {
-        maven {
+        // maven {
         //     url = uri("${System.getenv('JF_URL')}/artifactory/guoyz-maven-virtual")
         //     credentials {
         //         username = System.getenv('JF_USER')
