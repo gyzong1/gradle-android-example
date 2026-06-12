@@ -29,7 +29,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4 
         with:
           gradle-version: '7.6.3'
-          # Solve the error "Error: At least one Gradle Wrapper Jar failed validation!"
+          # Solve the error "Error: At least one Gradle Wrapper Jar failed validation!" 
           validate-wrappers: false
 
       - name: Run JFrog CLI
