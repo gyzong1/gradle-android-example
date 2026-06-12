@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    // 1. 添加 Maven publish 插件
+    // 1. 添加 Maven publish 插件 
     id 'maven-publish'
     id 'org.jlleitschuh.gradle.ktlint' version '13.0.0'
 }
