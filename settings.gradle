@@ -1,15 +1,15 @@
 pluginManagement {
     repositories {
         maven {
-            url = uri("${System.getenv('JF_URL')}/artifactory/guoyz-maven-virtual")
-            credentials {
-                username = System.getenv('JF_USER')
-                password = System.getenv('JF_ACCESS_TOKEN')
-            }
-        }
-        // google()
-        // mavenCentral()
-        // gradlePluginPortal()
+        //     url = uri("${System.getenv('JF_URL')}/artifactory/guoyz-maven-virtual")
+        //     credentials {
+        //         username = System.getenv('JF_USER')
+        //         password = System.getenv('JF_ACCESS_TOKEN')
+        //     }
+        // }
+        google()
+        mavenCentral()
+        gradlePluginPortal()
     }
 }
 
