@@ -1,0 +1,92 @@
+# GitHub Actions + JFrog CLI — Gradle (Android) 构建 / 上传 / Build Info / Xray 扫描
+# 仓库: https://github.com/gyzong1/gradle-android-example
+#
+# 仓库 Secrets / Variables:
+#   vars.JF_URL              JFrog Platform URL，如 https://xxx.com
+#   secrets.JF_ACCESS_TOKEN  具备 Deploy / Build Info / Xray Scan 权限的 Access Token
+#   secrets.JF_USER          Artifactory 用户名（部分环境下 publish 缺少用户会 401）
+#
+# Artifactory 仓库名可按环境修改；解析通常用 Maven virtual，部署用 Maven local
+
+name: Gradle Build & Publish to Artifactory
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+env:
+  JFROG_CLI_BUILD_NAME: guoyz-github-gradle-example
+  JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
+  # 解析 / 部署仓库（Gradle/Android 依赖与制品一般为 Maven 仓库）
+  GRADLE_REPO_RESOLVE: guoyz-github-maven-virtual
+  GRADLE_REPO_DEPLOY: guoyz-github-maven-local
+
+jobs:
+  build-publish-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "7.6.3"
+          # 避免 "At least one Gradle Wrapper Jar failed validation!"
+          validate-wrappers: false
+
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        with:
+          # 由本 workflow 显式执行 bce / bag / bp，关闭 action 自动发布，避免重复 Build Info
+          disable-auto-build-publish: true
+        env:
+          JF_URL: ${{ vars.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          JF_USER: ${{ secrets.JF_USER }}
+
+      - name: Ping Artifactory
+        run: jf rt ping
+
+      # 1) 配置 Gradle 解析 / 部署仓库
+      - name: Configure Gradle repositories
+        run: |
+          jf gradle-config \
+            --repo-resolve="${GRADLE_REPO_RESOLVE}" \
+            --repo-deploy="${GRADLE_REPO_DEPLOY}"
+
+      # 2) 构建 Android Release 并上传到 Artifactory，同时本地搜集 Build Info
+      - name: Build and publish to Artifactory
+        run: |
+          jf gradle clean assembleRelease artifactoryPublish \
+            --build-name="${JFROG_CLI_BUILD_NAME}" \
+            --build-number="${JFROG_CLI_BUILD_NUMBER}"
+
+      # 3) 搜集并发布 Build Info（环境变量 + Git VCS + 发布到 Artifactory）
+      - name: Collect and publish build info
+        run: |
+          jf rt build-collect-env \
+            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}"
+          jf rt build-add-git \
+            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}"
+          jf rt build-publish \
+            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}"
+
+      # 4) 使用 Xray 扫描已发布的 Build（有漏洞也不阻断流水线）
+      - name: Scan build with Xray
+        run: |
+          jf build-scan \
+            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}" \
+            --fail=false
